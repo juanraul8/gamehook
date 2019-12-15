@@ -10,7 +10,8 @@
 */
 
 
-static std::unordered_set<std::string> blacklist = {"GTAVLauncher.exe"};
+//static std::unordered_set<std::string> blacklist = {"GTAVLauncher.exe"};
+static std::unordered_set<std::string> blacklist = { "pCARS2.exe" };
 
 bool isBlackListed() {
 	TCHAR exepath[MAX_PATH], exename[MAX_PATH], filename[_MAX_FNAME], ext[_MAX_EXT];
@@ -19,6 +20,8 @@ bool isBlackListed() {
 	_splitpath_s(exepath, NULL, 0, NULL, 0, filename, _MAX_FNAME, ext, _MAX_EXT);
 	_makepath_s(exename, NULL, NULL, filename, ext);
 	std::string s_exename = exename;
+
+	LOG(INFO) << "Exec files: " << exepath;
 
 	if (blacklist.count(s_exename)) return true;
 

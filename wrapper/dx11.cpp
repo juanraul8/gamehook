@@ -730,6 +730,9 @@ public: /***  Global Data  ***/
 	DrawInfo draw_info;
 public: /***  GameController  ***/
 	GameHook() : GameHookBuffer(&draw_info.buffer), GameHookRenderTarget(&draw_info.target), GameHookShader(&draw_info.shader) {
+		
+		LOG(INFO) << "Start Controllers";
+		
 		startControllers();
 	}
 	// Recording logic
@@ -747,6 +750,9 @@ public: /***  GameController  ***/
 public: /***  IO Handling  ***/
 	bool reload_dlls = false;
 	virtual bool onKeyDown(unsigned char key, unsigned char special_status) {
+		
+		LOG(INFO) << "onKeyDown";
+
 		// Reload keyboard shortcut (CTLR + F10)
 		if (key == VK_F10 && (special_status & 7) == CTRL) {
 			reload_dlls = true;
@@ -759,6 +765,8 @@ public: /***  IO Handling  ***/
 public: // Main rendering loop
 	virtual HRESULT Present(unsigned int SyncInterval, unsigned int Flags) override {
 		// Present serves as the main control loop in GameHook
+
+		LOG(INFO) << "*****************Present function: " << Flags << " ****************************";
 
 		TIC;
 		if (!Flags) {
@@ -856,6 +864,9 @@ public: /***  PostFX  ***/
 
 	virtual void callPostFx(std::shared_ptr<Shader> shader) {
 		TIC;
+
+		LOG(INFO) << "callPostFx";
+
 		if (!postfx_shaders.count(shader->hash())) {
 			// Compile the postprocessing shader
 			PostFXShader r;
@@ -920,6 +931,8 @@ public: /* Drawing calls */
 	ID3D11ClassInstance * old_ps_ci[256], * old_vs_ci[256];
 	void beginDraw(DrawInfo::Type type, uint16_t instances, uint32_t n, uint32_t start_index, uint32_t start_vertex, uint32_t start_instance) {
 		TIC;
+
+		LOG(INFO) << "Begin Draw Call ";
 
 		// Call startDraw of all plugins
 		draw_info.type = type;
@@ -998,7 +1011,11 @@ public: /* Drawing calls */
 	}
 	void endDraw() {
 		TIC;
+
+		LOG(INFO) << "End Draw Call ";
+
 		onEndDraw(draw_info);
+		
 		for (int i = 0; i < 20; i++) {
 			if (old_vs_cbuffer[i]) {
 				D3D11Hook::VSSetConstantBuffers(i, 1, old_vs_cbuffer + i);
@@ -1009,6 +1026,7 @@ public: /* Drawing calls */
 				old_ps_cbuffer[i] = 0;
 			}
 		}
+		
 		if (current_custom_pixel_shader_)
 			D3D11Hook::OMSetRenderTargetsAndUnorderedAccessViews((UINT)current_RenderTargetViews.size(), current_RenderTargetViews.data(), current_DepthStencilView, (UINT)current_RenderTargetViews.size(), (UINT)current_UnorderedAccessViews.size(), current_UnorderedAccessViews.data(), nullptr);
 		
@@ -1016,6 +1034,7 @@ public: /* Drawing calls */
 		TOC;
 	}
 	virtual void Draw(UINT VertexCount, UINT StartVertexLocation) {
+			
 		beginDraw(DrawInfo::VERTEX, 0, VertexCount, 0, StartVertexLocation, 0);
 		if (!hide_draw)
 			D3D11Hook::Draw(VertexCount, StartVertexLocation);
@@ -1073,25 +1092,46 @@ public: /* Drawing calls */
 	}
 };
 
-
+int n_hooks = 0;
 void hookDevice(ID3D11Device** ppDevice, ID3D11DeviceContext** ppImmediateContext) {
+	
+
+	//LOG(INFO) << n_hooks;
+
 	if (ppDevice && *ppDevice) {
+		//LOG(INFO) << "Hooking the device and device context";
+
+		n_hooks++;
+
+		if (n_hooks != 13) return;
+
+		LOG(INFO) << "Hooking the device on " << n_hooks;
+
+		std::shared_ptr<GameHook> hook = std::make_shared<GameHook>();
+
+		if (!wrapDeviceAndContext(ppDevice, ppImmediateContext, hook))
+			LOG(WARN) << "Failed to wrap the device!";
+	}
+
+	/*if (ppDevice && *ppDevice) {
 		LOG(INFO) << "Hooking the device and device context";
 		std::shared_ptr<GameHook> hook = std::make_shared<GameHook>();
 		if (!wrapDeviceAndContext(ppDevice, ppImmediateContext, hook))
 			LOG(WARN) << "Failed to wrap the device!";
-	}
+	}*/
 }
 void hookSwapChain(IUnknown* pDevice, HWND wnd, IDXGISwapChain** ppSwapChain) {
 	if (ppSwapChain && *ppSwapChain && pDevice) {
 		D3D11Device *device_d3d11 = nullptr;
 		if (SUCCEEDED(pDevice->QueryInterface(&device_d3d11))) {
 			LOG(INFO) << "Hooking the swap chain";
+			
 			if (!wrapSwapChain(ppSwapChain, device_d3d11))
 				LOG(WARN) << "Failed to wrap the swap chain";
 
 			LOG(INFO) << "Hooking the io";
 			std::shared_ptr<GameHook> hook = std::dynamic_pointer_cast<GameHook>(device_d3d11->h_);
+			
 			if (!hook || !wrapIO(wnd, hook))
 				LOG(WARN) << "Failed to wrap the IO";
 		}

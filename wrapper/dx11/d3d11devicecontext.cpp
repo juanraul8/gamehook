@@ -212,7 +212,7 @@ void D3D11DeviceContextHook::CopyStructureCount(ID3D11Buffer *pDstBuffer, UINT D
 	return c_->CopyStructureCount(pDstBuffer, DstAlignedByteOffset, pSrcView);
 }
 void D3D11DeviceContextHook::ClearRenderTargetView(ID3D11RenderTargetView *pRenderTargetView, const FLOAT ColorRGBA[4]) {
-	return c_->ClearRenderTargetView(pRenderTargetView, ColorRGBA);
+		return c_->ClearRenderTargetView(pRenderTargetView, ColorRGBA);
 }
 void D3D11DeviceContextHook::ClearUnorderedAccessViewUint(ID3D11UnorderedAccessView *pUnorderedAccessView, const UINT Values[4]) {
 	return c_->ClearUnorderedAccessViewUint(pUnorderedAccessView, Values);
@@ -616,6 +616,9 @@ void STDMETHODCALLTYPE D3D11DeviceContext::GSSetSamplers(UINT StartSlot, UINT Nu
 	return h_->GSSetSamplers(StartSlot, NumSamplers, ppSamplers);
 }
 void STDMETHODCALLTYPE D3D11DeviceContext::OMSetRenderTargets(UINT NumViews, ID3D11RenderTargetView *const *ppRenderTargetViews, ID3D11DepthStencilView *pDepthStencilView) {
+	
+	//LOG(INFO) << "OMSetRenderTargets: " << NumViews;
+	
 	return h_->OMSetRenderTargets(NumViews, ppRenderTargetViews, pDepthStencilView);
 }
 void STDMETHODCALLTYPE D3D11DeviceContext::OMSetRenderTargetsAndUnorderedAccessViews(UINT NumRTVs, ID3D11RenderTargetView *const *ppRenderTargetViews, ID3D11DepthStencilView *pDepthStencilView, UINT UAVStartSlot, UINT NumUAVs, ID3D11UnorderedAccessView *const *ppUnorderedAccessViews, const UINT *pUAVInitialCounts) {
@@ -646,6 +649,7 @@ void STDMETHODCALLTYPE D3D11DeviceContext::DispatchIndirect(ID3D11Buffer *pBuffe
 	return h_->DispatchIndirect(pBufferForArgs, AlignedByteOffsetForArgs);
 }
 void STDMETHODCALLTYPE D3D11DeviceContext::RSSetState(ID3D11RasterizerState *pRasterizerState) {
+		
 	return h_->RSSetState(pRasterizerState);
 }
 void STDMETHODCALLTYPE D3D11DeviceContext::RSSetViewports(UINT NumViewports, const D3D11_VIEWPORT *pViewports) {
@@ -667,6 +671,9 @@ void STDMETHODCALLTYPE D3D11DeviceContext::CopyStructureCount(ID3D11Buffer *pDst
 	return h_->CopyStructureCount(pDstBuffer, DstAlignedByteOffset, pSrcView);
 }
 void STDMETHODCALLTYPE D3D11DeviceContext::ClearRenderTargetView(ID3D11RenderTargetView *pRenderTargetView, const FLOAT ColorRGBA[4]) {
+	
+	LOG(INFO) << "ClearRenderTargetView";
+
 	return h_->ClearRenderTargetView(pRenderTargetView, ColorRGBA);
 }
 void STDMETHODCALLTYPE D3D11DeviceContext::ClearUnorderedAccessViewUint(ID3D11UnorderedAccessView *pUnorderedAccessView, const UINT Values[4]) {

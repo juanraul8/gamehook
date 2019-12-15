@@ -210,7 +210,9 @@ BOOL WINAPI nSetCursorPos(int X, int Y) {
 Hook<BOOL, LPPOINT> hGetCursorPos;
 BOOL WINAPI nGetCursorPos(LPPOINT p) {
 	BOOL r = hGetCursorPos(p);
+	
 	//LOG(INFO) << "Get cursor position " << p->x << " , " << p->y;
+	
 	return r;
 }
 Hook<HCURSOR, HCURSOR> hSetCursor;

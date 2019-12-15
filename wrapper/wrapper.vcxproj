@@ -156,7 +156,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\SDK\json.h" />
     <ClInclude Include="..\SDK\log.h" />
     <ClInclude Include="..\SDK\sdk.h" />
     <ClInclude Include="..\SDK\shader.h" />
