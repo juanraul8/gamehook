@@ -7,7 +7,6 @@
 #include "util.h"
 #include "resource.h"
 #include "shader.h"
-#include "speed.h"
 #include "maingamecontroller.h"
 #include "rendertarget.h"
 #include "config/config.h"
@@ -21,7 +20,6 @@
 #pragma warning( disable : 4250 ) // Domiance warnings
 
 //#define _DEBUG
-//#define TIMING
 
 #ifdef TIMING
 // Note: Timing is slow in QEMU
@@ -1240,7 +1238,6 @@ void hookD3D11() {
 	hCreateDXGIFactory1.setup(CreateDXGIFactory1, nCreateDXGIFactory1);
 	hCreateDXGIFactory2.setup(CreateDXGIFactory2, nCreateDXGIFactory2);
 	hookIO();
-	hookSpeed();
 }
 void unhookD3D11() {
 	LOG(INFO) << "Good bye";
@@ -1250,5 +1247,4 @@ void unhookD3D11() {
 	hCreateDXGIFactory1.disable();
 	hCreateDXGIFactory2.disable();
 	unhookIO();
-	unhookSpeed();
 }

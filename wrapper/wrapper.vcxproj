@@ -177,7 +177,6 @@
     <ClInclude Include="rendertarget.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="shader.h" />
-    <ClInclude Include="speed.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
@@ -197,7 +196,6 @@
     <ClCompile Include="rendertarget.cpp" />
     <ClCompile Include="resource.cpp" />
     <ClCompile Include="shader.cpp" />
-    <ClCompile Include="speed.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="$(SolutionDir)\external\murmur\MurmurHash3.cpp" />
   </ItemGroup>

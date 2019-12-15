@@ -75,9 +75,6 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="speed.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cbuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -135,9 +132,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="resource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="speed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cbuffer.cpp">

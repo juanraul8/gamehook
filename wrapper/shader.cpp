@@ -37,6 +37,7 @@ std::ostream & operator<<(std::ostream & o, const Shader::Buffer & h) {
 }
 
 std::shared_ptr<Shader> Shader::create(const ByteCode & src, const std::unordered_map<std::string, std::string> & name_remap) {
+	
 	HLSL s(src);
 	if (s.type() == HLSL::PIXEL_SHADER)
 		return std::make_shared<PixelShader>(src, name_remap);
